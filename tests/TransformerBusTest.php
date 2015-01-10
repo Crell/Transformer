@@ -4,6 +4,7 @@ namespace Crell\Transformer\Tests;
 
 use Crell\Transformer\TransformerBus;
 
+
 class TransformerBusTest extends \PHPUnit_Framework_TestCase
 {
 

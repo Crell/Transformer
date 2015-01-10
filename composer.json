@@ -12,7 +12,10 @@
         }
     ],
     "autoload": {
-        "psr-4": {"Crell\\Transformer\\": "src/"}
+        "psr-4": {
+            "Crell\\Transformer\\": "src/",
+            "Crell\\Transformer\\Tests\\": "tests/"
+        }
     },
     "extra": {
         "branch-alias": {
