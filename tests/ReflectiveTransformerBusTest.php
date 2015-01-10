@@ -3,45 +3,40 @@
 namespace Crell\Transformer\Tests;
 
 use Crell\Transformer\ReflectiveTransformerBus;
-use Crell\Transformer\TransformerBus;
-
-class D {}
-class E {}
-class F {}
 
 class ReflectiveTransformerBusTest extends \PHPUnit_Framework_TestCase
 {
 
     public function testSimpleMap()
     {
-        $transformer = function(D $a) {
-            return new E();
+        $transformer = function(TestA $a) {
+            return new TestB();
         };
 
-        $bus = new ReflectiveTransformerBus('Crell\Transformer\Tests\E');
+        $bus = new ReflectiveTransformerBus('Crell\Transformer\Tests\TestB');
         $bus->setAutomaticTransformer($transformer);
 
-        $result = $bus->transform(new D());
+        $result = $bus->transform(new TestA());
 
-        $this->assertInstanceOf('Crell\Transformer\Tests\E', $result);
+        $this->assertInstanceOf('Crell\Transformer\Tests\TestB', $result);
     }
 
     public function testMultistepMap()
     {
-        $DTransformer = function(D $a) {
-            return new E();
+        $ATransformer = function(TestA $a) {
+            return new TestB();
         };
-        $ETransformer = function(E $a) {
-            return new F();
+        $BTransformer = function(TestB $a) {
+            return new TestC();
         };
 
-        $bus = new ReflectiveTransformerBus('Crell\Transformer\Tests\F');
-        $bus->setAutomaticTransformer($DTransformer);
-        $bus->setAutomaticTransformer($ETransformer);
+        $bus = new ReflectiveTransformerBus('Crell\Transformer\Tests\TestC');
+        $bus->setAutomaticTransformer($ATransformer);
+        $bus->setAutomaticTransformer($BTransformer);
 
-        $result = $bus->transform(new D());
+        $result = $bus->transform(new TestA());
 
-        $this->assertInstanceOf('Crell\Transformer\Tests\F', $result);
+        $this->assertInstanceOf('Crell\Transformer\Tests\TestC', $result);
     }
 
 }

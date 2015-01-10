@@ -4,43 +4,39 @@ namespace Crell\Transformer\Tests;
 
 use Crell\Transformer\TransformerBus;
 
-class A {}
-class B {}
-class C {}
-
 class TransformerBusTest extends \PHPUnit_Framework_TestCase
 {
 
     public function testSimpleMap()
     {
-        $transformer = function(A $a) {
-            return new B();
+        $transformer = function(TestA $a) {
+            return new TestB();
         };
 
-        $bus = new TransformerBus('Crell\Transformer\Tests\B');
-        $bus->setTransformer('Crell\Transformer\Tests\A', $transformer);
+        $bus = new TransformerBus('Crell\Transformer\Tests\TestB');
+        $bus->setTransformer('Crell\Transformer\Tests\TestA', $transformer);
 
-        $result = $bus->transform(new A());
+        $result = $bus->transform(new TestA());
 
-        $this->assertInstanceOf('Crell\Transformer\Tests\B', $result);
+        $this->assertInstanceOf('Crell\Transformer\Tests\TestB', $result);
     }
 
     public function testMultistepMap()
     {
-        $ATransformer = function(A $a) {
-            return new B();
+        $ATransformer = function(TestA $a) {
+            return new TestB();
         };
-        $BTransformer = function(B $a) {
-            return new C();
+        $BTransformer = function(TestB $a) {
+            return new TestC();
         };
 
-        $bus = new TransformerBus('Crell\Transformer\Tests\C');
-        $bus->setTransformer('Crell\Transformer\Tests\A', $ATransformer);
-        $bus->setTransformer('Crell\Transformer\Tests\B', $BTransformer);
+        $bus = new TransformerBus('Crell\Transformer\Tests\TestC');
+        $bus->setTransformer('Crell\Transformer\Tests\TestA', $ATransformer);
+        $bus->setTransformer('Crell\Transformer\Tests\TestB', $BTransformer);
 
-        $result = $bus->transform(new A());
+        $result = $bus->transform(new TestA());
 
-        $this->assertInstanceOf('Crell\Transformer\Tests\C', $result);
+        $this->assertInstanceOf('Crell\Transformer\Tests\TestC', $result);
     }
 
 }
