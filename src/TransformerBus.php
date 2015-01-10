@@ -9,9 +9,11 @@
 namespace Crell\Transformer;
 
 
+/**
+ * Default implementation of a Transformation bus.
+ */
 class TransformerBus implements TransformerBusInterface
 {
-
     /**
      * We want an object of this class at the end of the day.
      *
