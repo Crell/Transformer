@@ -1,23 +1,12 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: crell
- * Date: 1/10/15
- * Time: 12:11 AM
- */
 
-namespace Crell\TransformerBundle\Tests;
+namespace Crell\Transformer\Tests;
 
 use Crell\Transformer\TransformerBus;
 
 class A {}
 class B {}
 class C {}
-
-class Transformer
-{
-    public function transform($source) {}
-}
 
 class TransformerBusTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,12 +17,12 @@ class TransformerBusTest extends \PHPUnit_Framework_TestCase
             return new B();
         };
 
-        $bus = new TransformerBus('Crell\TransformerBundle\Tests\B');
-        $bus->setTransformer('Crell\TransformerBundle\Tests\A', $transformer);
+        $bus = new TransformerBus('Crell\Transformer\Tests\B');
+        $bus->setTransformer('Crell\Transformer\Tests\A', $transformer);
 
         $result = $bus->transform(new A());
 
-        $this->assertInstanceOf('Crell\TransformerBundle\Tests\B', $result);
+        $this->assertInstanceOf('Crell\Transformer\Tests\B', $result);
     }
 
     public function testMultistepMap()
@@ -45,13 +34,13 @@ class TransformerBusTest extends \PHPUnit_Framework_TestCase
             return new C();
         };
 
-        $bus = new TransformerBus('Crell\TransformerBundle\Tests\C');
-        $bus->setTransformer('Crell\TransformerBundle\Tests\A', $ATransformer);
-        $bus->setTransformer('Crell\TransformerBundle\Tests\B', $BTransformer);
+        $bus = new TransformerBus('Crell\Transformer\Tests\C');
+        $bus->setTransformer('Crell\Transformer\Tests\A', $ATransformer);
+        $bus->setTransformer('Crell\Transformer\Tests\B', $BTransformer);
 
         $result = $bus->transform(new A());
 
-        $this->assertInstanceOf('Crell\TransformerBundle\Tests\C', $result);
+        $this->assertInstanceOf('Crell\Transformer\Tests\C', $result);
     }
 
 }
