@@ -44,7 +44,7 @@ class TransformerBus implements TransformerBusInterface
         $current = $source;
         $current_class = get_class($current);
 
-        while ($current_class != $this->targetClass) {
+        while (! $current instanceof $this->targetClass) {
             $transformer = $this->getTransformer($current_class);
             $current = $transformer($current);
             $current_class = get_class($current);

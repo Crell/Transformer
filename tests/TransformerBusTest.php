@@ -43,6 +43,20 @@ class TransformerBusTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(TestC::CLASSNAME, $result);
     }
 
+    public function testExtendedClassMap()
+    {
+        $transformer = function(TestA $a) {
+            return new TestB2();
+        };
+
+        $bus = new TransformerBus(TestB::CLASSNAME);
+        $bus->setTransformer(TestA::CLASSNAME, $transformer);
+
+        $result = $bus->transform(new TestA());
+
+        $this->assertInstanceOf(TestB::CLASSNAME, $result);
+    }
+
     /**
      * @param string $from
      *
