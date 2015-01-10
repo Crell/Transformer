@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: crell
- * Date: 1/9/15
- * Time: 11:58 PM
- */
 
 namespace Crell\Transformer;
-
 
 /**
  * Default implementation of a Transformation bus.

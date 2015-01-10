@@ -1,14 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: crell
- * Date: 1/10/15
- * Time: 12:03 AM
- */
+
 
 namespace Crell\Transformer;
 
-
+/**
+ * Exception thrown when a Transformer Bus cannot locate an appropriate transformer.
+ */
 class NoTransformerFoundException extends \RuntimeException {
 
 }

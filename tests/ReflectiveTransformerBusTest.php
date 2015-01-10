@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: crell
- * Date: 1/10/15
- * Time: 1:30 AM
- */
 
 namespace Crell\Transformer\Tests;
 
