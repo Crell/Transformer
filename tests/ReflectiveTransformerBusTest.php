@@ -4,10 +4,10 @@ namespace Crell\Transformer\Tests;
 
 use Crell\Transformer\ReflectiveTransformerBus;
 
-class ReflectiveTransformerBusTest extends \PHPUnit_Framework_TestCase
+class ReflectiveTransformerBusTest extends TransformerBusTest
 {
 
-    public function testSimpleMap()
+    public function testSimpleAutomaticMap()
     {
         $transformer = function(TestA $a) {
             return new TestB();
@@ -21,7 +21,7 @@ class ReflectiveTransformerBusTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(TestB::CLASSNAME, $result);
     }
 
-    public function testMultistepMap()
+    public function testMultistepAutomaticMap()
     {
         $ATransformer = function(TestA $a) {
             return new TestB();
