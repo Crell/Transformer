@@ -45,18 +45,44 @@ class TransformerBus implements TransformerBusInterface
         $current_class = get_class($current);
 
         while ($current_class != $this->targetClass) {
-            if (empty($this->transformers[$current_class])) {
-                throw new NoTransformerFoundException(sprintf("No transformer registered for class '%s'", $current_class));
-            }
-            $current = $this->transformers[$current_class]($current);
+            $transformer = $this->getTransformer($current_class);
+            $current = $transformer($current);
             $current_class = get_class($current);
         }
 
         return $current;
     }
 
+    /**
+     * Sets the transformer for a specified type.
+     *
+     * @param string $class
+     *   The class this transformer can handle.
+     * @param callable $transformer
+     *   A callable that will transform an object of type $class to something else.
+     */
     public function setTransformer($class, callable $transformer)
     {
         $this->transformers[$class] = $transformer;
+    }
+
+    /**
+     * Gets the transformer callable for a given class.
+     *
+     * @param string $class
+     *   The class we want to transform.
+     * @return callable|null
+     *   Returns the corresponding transformer, or null if there isn't one.
+     *
+     * @throws NoTransformerFoundException
+     *   Throws an exception if we ever hit a class for which no transformer
+     *   has been specified.
+     */
+    protected function getTransformer($class)
+    {
+        if (!isset($this->transformers[$class])) {
+            throw new NoTransformerFoundException(sprintf("No transformer registered for class '%s'", $class));
+        }
+        return $this->transformers[$class];
     }
 }
