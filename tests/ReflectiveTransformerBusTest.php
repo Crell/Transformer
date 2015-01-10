@@ -6,6 +6,7 @@ use Crell\Transformer\ReflectiveTransformerBus;
 
 class ReflectiveTransformerBusTest extends TransformerBusTest
 {
+    protected $classToTest = 'Crell\Transformer\ReflectiveTransformerBus';
 
     public function testSimpleAutomaticMap()
     {
@@ -38,5 +39,4 @@ class ReflectiveTransformerBusTest extends TransformerBusTest
 
         $this->assertInstanceOf(TestC::CLASSNAME, $result);
     }
-
 }
