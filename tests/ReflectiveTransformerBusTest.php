@@ -13,12 +13,12 @@ class ReflectiveTransformerBusTest extends \PHPUnit_Framework_TestCase
             return new TestB();
         };
 
-        $bus = new ReflectiveTransformerBus('Crell\Transformer\Tests\TestB');
+        $bus = new ReflectiveTransformerBus(TestB::CLASSNAME);
         $bus->setAutomaticTransformer($transformer);
 
         $result = $bus->transform(new TestA());
 
-        $this->assertInstanceOf('Crell\Transformer\Tests\TestB', $result);
+        $this->assertInstanceOf(TestB::CLASSNAME, $result);
     }
 
     public function testMultistepMap()
@@ -30,13 +30,13 @@ class ReflectiveTransformerBusTest extends \PHPUnit_Framework_TestCase
             return new TestC();
         };
 
-        $bus = new ReflectiveTransformerBus('Crell\Transformer\Tests\TestC');
+        $bus = new ReflectiveTransformerBus(TestC::CLASSNAME);
         $bus->setAutomaticTransformer($ATransformer);
         $bus->setAutomaticTransformer($BTransformer);
 
         $result = $bus->transform(new TestA());
 
-        $this->assertInstanceOf('Crell\Transformer\Tests\TestC', $result);
+        $this->assertInstanceOf(TestC::CLASSNAME, $result);
     }
 
 }
