@@ -1,11 +1,9 @@
-Transformer Bus
-===============
+#Transformer Bus
 
 This is a simple library that simplifies building of transformation pipelines
 based on typed PHP objects.
 
-"What does that mean?"
----------------------
+## "What does that mean?"
 
 Consider this scenario: You have some process or set of processes, which in the
 end should result in an object of some type.  However, your various processes
@@ -35,8 +33,7 @@ Each of those steps is a *transformation*, and is carried out by a *transformer*
 A transformer is simply a PHP callable that takes an object of one type and 
 returns an object of another.
 
-Usage
------
+## Usage
 
 Using the example above, we could wire it up something like this.  (This example 
 uses PHP 5.5 syntax but the library supports PHP 5.4.)
@@ -129,8 +126,7 @@ HtmlPage, or Response, and we'll reliably get a Response at the end.
 There are no doubt many other use cases, but that's the one I had in mind when
 writing this library originally.
 
-Reflective Bus
---------------
+## Reflective Bus
 
 An extra implementation is available, `ReflectiveTransformerBus`. It works 
 the same way as TransformerBus, but you may register transformers like so:
@@ -147,14 +143,23 @@ And it will use reflection to register that callable for Product classes without
 having to be told explicitly.  That's more convenient but has a small overhead
 for the reflection process.
 
-See also
---------
+## Installation
+
+The preferred method of installation is via Composer with the following command:
+
+    composer require crell/transformer
+
+See the [Composer documentation][2] for more details.
+
+Alternatively, clone the project and install into your project manually.
+
+## See also
 
 For users of the Symfony framework, another variant is available that will
 accept Symfony "extended callables", so you can register services as transformers
 and they won't be loaded until/unless used.  See <a href="https://github.com/Crell/TransformerBundle">TransformerBundle</a>.
 
-LICENSE
--------
+## License
 
-This library is available under the MIT license.
+This library is released under the MIT license.  In short, "leave the copyright
+statement intact, otherwise have fun."  See LICENSE for more information.
