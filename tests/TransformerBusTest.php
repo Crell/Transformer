@@ -8,8 +8,18 @@ use Crell\Transformer\TransformerBusInterface;
 
 class TransformerBusTest extends \PHPUnit_Framework_TestCase
 {
-
-    protected $classToTest = 'Crell\Transformer\TransformerBus';
+    /**
+     * Creates a transformer bus to be tested.
+     *
+     * @param $target
+     *   The target class the transformer under test should produce.
+     * @return TransformerBusInterface
+     *   The transformer bus implementation being tested.
+     */
+    protected function createTransformerBus($target) {
+        $bus = new TransformerBus($target);
+        return $bus;
+    }
 
     public function testSimpleMap()
     {
@@ -17,7 +27,7 @@ class TransformerBusTest extends \PHPUnit_Framework_TestCase
             return new TestB();
         };
 
-        $bus = new TransformerBus(TestB::CLASSNAME);
+        $bus = $this->createTransformerBus(TestB::CLASSNAME);
         $bus->setTransformer(TestA::CLASSNAME, $transformer);
 
         $result = $bus->transform(new TestA());
@@ -34,7 +44,7 @@ class TransformerBusTest extends \PHPUnit_Framework_TestCase
             return new TestC();
         };
 
-        $bus = new TransformerBus(TestC::CLASSNAME);
+        $bus = $this->createTransformerBus(TestC::CLASSNAME);
         $bus->setTransformer(TestA::CLASSNAME, $ATransformer);
         $bus->setTransformer(TestB::CLASSNAME, $BTransformer);
 
@@ -49,7 +59,7 @@ class TransformerBusTest extends \PHPUnit_Framework_TestCase
             return new TestB2();
         };
 
-        $bus = new TransformerBus(TestB::CLASSNAME);
+        $bus = $this->createTransformerBus(TestB::CLASSNAME);
         $bus->setTransformer(TestA::CLASSNAME, $transformer);
 
         $result = $bus->transform(new TestA());
@@ -63,15 +73,19 @@ class TransformerBusTest extends \PHPUnit_Framework_TestCase
      * @param string $to
      * @param mixed $transformer
      *   A transformer definition (aka callable definition).
+     * @param string $exception
+     *   The type of an Exception that should be thrown in case of an unsuccessful
+     *   transformation. Leave null for test sets that should succeed.
      *
      * @dataProvider transformerDefinitionProvider
      */
-    public function testCallableOptions($from, $to, $transformer)
+    public function testCallableOptions($from, $to, $transformer, $exception = null)
     {
-        $classToTest = $this->classToTest;
+        if ($exception) {
+            $this->setExpectedException($exception);
+        }
 
-        /** @var TransformerBusInterface $bus */
-        $bus = new $classToTest($to);
+        $bus = $this->createTransformerBus($to);
         $bus->setTransformer($from, $transformer);
 
         $result = $bus->transform(new $from());
@@ -85,10 +99,14 @@ class TransformerBusTest extends \PHPUnit_Framework_TestCase
     {
         $defs = [];
 
+        // Successful tests.
         $defs[] = [TestA::CLASSNAME, TestB::CLASSNAME, function(TestA $a) { return new TestB(); }];
         $defs[] = [TestA::CLASSNAME, TestB::CLASSNAME, __NAMESPACE__ . '\function_converter_test'];
         $defs[] = [TestA::CLASSNAME, TestB::CLASSNAME, [MethodConverterTest::CLASSNAME, 'staticTransform']];
         $defs[] = [TestA::CLASSNAME, TestB::CLASSNAME, [new MethodConverterTest(), 'transform']];
+
+        // Invalid data that should fail.
+        $defs[] = [TestA::CLASSNAME, TestC::CLASSNAME, function(TestA $a) { return new TestB(); }, 'Crell\Transformer\NoTransformerFoundException'];
 
         return $defs;
     }

@@ -6,7 +6,14 @@ use Crell\Transformer\ReflectiveTransformerBus;
 
 class ReflectiveTransformerBusTest extends TransformerBusTest
 {
-    protected $classToTest = 'Crell\Transformer\ReflectiveTransformerBus';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function createTransformerBus($target) {
+        $bus = new ReflectiveTransformerBus($target);
+        return $bus;
+    }
 
     public function testSimpleAutomaticMap()
     {
@@ -14,7 +21,7 @@ class ReflectiveTransformerBusTest extends TransformerBusTest
             return new TestB();
         };
 
-        $bus = new ReflectiveTransformerBus(TestB::CLASSNAME);
+        $bus = $this->createTransformerBus(TestB::CLASSNAME);
         $bus->setAutomaticTransformer($transformer);
 
         $result = $bus->transform(new TestA());
@@ -31,7 +38,7 @@ class ReflectiveTransformerBusTest extends TransformerBusTest
             return new TestC();
         };
 
-        $bus = new ReflectiveTransformerBus(TestC::CLASSNAME);
+        $bus = $this->createTransformerBus(TestC::CLASSNAME);
         $bus->setAutomaticTransformer($ATransformer);
         $bus->setAutomaticTransformer($BTransformer);
 
@@ -39,4 +46,46 @@ class ReflectiveTransformerBusTest extends TransformerBusTest
 
         $this->assertInstanceOf(TestC::CLASSNAME, $result);
     }
+
+    /**
+     * @param string $from
+     *
+     * @param string $to
+     * @param mixed $transformer
+     *   A transformer definition (aka callable definition).
+     * @param string $exception
+     *   The type of an Exception that should be thrown in case of an unsuccessful
+     *   transformation. Leave null for test sets that should succeed.
+     *
+     * @dataProvider transformerDefinitionProvider
+     */
+    public function testCallableOptions($from, $to, $transformer, $exception = null)
+    {
+        if ($exception) {
+            $this->setExpectedException($exception);
+        }
+
+        $bus = $this->createTransformerBus($to);
+        $bus->setAutomaticTransformer($transformer);
+
+        $result = $bus->transform(new $from());
+        $this->assertInstanceOf($to, $result);
+    }
+
+    /**
+     * Defines an array of transformers that convert from TestA to TestB.
+     */
+    public function transformerDefinitionProvider()
+    {
+        $defs = parent::transformerDefinitionProvider();
+
+        // Invalid data that should fail.
+        $defs[] = [TestA::CLASSNAME, TestB::CLASSNAME, function() { return new TestB(); }, 'Crell\Transformer\InvalidTransformerException'];
+        $defs[] = [TestA::CLASSNAME, TestB::CLASSNAME, function($a) { return new TestB(); }, 'Crell\Transformer\InvalidTransformerException'];
+        $defs[] = [TestA::CLASSNAME, TestB::CLASSNAME, function(TestC $c) { return new TestB(); }, 'Crell\Transformer\NoTransformerFoundException'];
+
+        return $defs;
+    }
+
+
 }

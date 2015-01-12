@@ -45,7 +45,7 @@ class ReflectiveTransformerBus extends TransformerBus
 
         $parameters = $r->getParameters();
         if (count($parameters) != 1) {
-            throw new InvalidTransformerException();
+            throw new InvalidTransformerException('A transformer must have one parameter and it must be typed to the input class type.');
         }
 
         $class = $parameters[0]->getClass();
