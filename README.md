@@ -82,13 +82,12 @@ $bus->setTransformer(Customer::class, function(Customer $p) {
 });
 
 // Register a transformer for HtmlBody objects, this one as a function.
-$bus->setTransformer(HtmlBody::class, 'makePage');
-
 function makePage(HtmlBody $p) {
   $page = new HtmlPage();
   // Do some business logic here.
   return $page.
 }
+$bus->setTransformer(HtmlBody::class, 'makePage');
 
 // Register a transformer for HtmlPage objects. Any PHP callable works.
 class PageTransformer {
@@ -105,7 +104,6 @@ $bus->setTransformer(HtmlBody::class, [$p, 'transform']);
 Now we can use that bus like so:
 
 ```php
-
 $p = getProductFromSomewhere();
 $response = $bus->transform($p);
 
@@ -148,6 +146,13 @@ $bus->setAutomaticTransformer(function(Product $p) {
 And it will use reflection to register that callable for Product classes without
 having to be told explicitly.  That's more convenient but has a small overhead
 for the reflection process.
+
+See also
+--------
+
+For users of the Symfony framework, another variant is available that will
+accept Symfony "extended callables", so you can register services as transformers
+and they won't be loaded until/unless used.  See <a href="https://github.com/Crell/TransformerBundle">TransformerBundle</a>.
 
 LICENSE
 -------
