@@ -16,10 +16,5 @@
             "Crell\\Transformer\\": "src/",
             "Crell\\Transformer\\Tests\\": "tests/"
         }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "master"
-        }
     }
 }
