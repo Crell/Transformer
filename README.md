@@ -1,5 +1,8 @@
 #Transformer Bus
 
+
+[![Build Status](https://travis-ci.org/Crell/Transformer.svg?branch=master)](https://travis-ci.org/Crell/Transformer)
+
 This is a simple library that simplifies building of transformation pipelines
 based on typed PHP objects.
 
