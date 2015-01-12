@@ -84,8 +84,50 @@ class ReflectiveTransformerBusTest extends TransformerBusTest
         $defs[] = [TestA::CLASSNAME, TestB::CLASSNAME, function($a) { return new TestB(); }, 'Crell\Transformer\InvalidTransformerException'];
         $defs[] = [TestA::CLASSNAME, TestB::CLASSNAME, function(TestC $c) { return new TestB(); }, 'Crell\Transformer\NoTransformerFoundException'];
 
+        $defs[] = [TestA::CLASSNAME, TestB::CLASSNAME, [InvalidTransformers::CLASSNAME, 'staticNoParam'], 'Crell\Transformer\InvalidTransformerException'];
+        $defs[] = [TestA::CLASSNAME, TestB::CLASSNAME, [InvalidTransformers::CLASSNAME, 'staticNoType'], 'Crell\Transformer\InvalidTransformerException'];
+        $defs[] = [TestA::CLASSNAME, TestB::CLASSNAME, [InvalidTransformers::CLASSNAME, 'staticWrongType'], 'Crell\Transformer\NoTransformerFoundException'];
+
+        $defs[] = [TestA::CLASSNAME, TestB::CLASSNAME, [new InvalidTransformers(), 'noParam'], 'Crell\Transformer\InvalidTransformerException'];
+        $defs[] = [TestA::CLASSNAME, TestB::CLASSNAME, [new InvalidTransformers(), 'noType'], 'Crell\Transformer\InvalidTransformerException'];
+        $defs[] = [TestA::CLASSNAME, TestB::CLASSNAME, [new InvalidTransformers(), 'wrongType'], 'Crell\Transformer\NoTransformerFoundException'];
+
         return $defs;
     }
 
+}
 
+class InvalidTransformers
+{
+    const CLASSNAME = __CLASS__;
+
+    public function noParam()
+    {
+        return new TestB();
+    }
+
+    public function noType($a)
+    {
+        return new TestB();
+    }
+
+    public function wrongType(TestC $a)
+    {
+        return new TestB();
+    }
+
+    public static function staticNoParam()
+    {
+        return new TestB();
+    }
+
+    public static function staticNoType($a)
+    {
+        return new TestB();
+    }
+
+    public static function staticWrongType(TestC $a)
+    {
+        return new TestB();
+    }
 }
