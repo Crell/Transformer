@@ -72,7 +72,7 @@ $bus = new TransformerBus(Response::class);
 $bus->setTransformer(Product::class, function(Product $p) {
   $fragment = new HtmlBody();
   // Do some business logic here.
-  return $fragment.
+  return $fragment;
 });
 
 // Register a transformer for Customer objects. Note that it's totally OK
@@ -80,14 +80,14 @@ $bus->setTransformer(Product::class, function(Product $p) {
 $bus->setTransformer(Customer::class, function(Customer $p) {
   $fragment = new HtmlBody();
   // Do some business logic here.
-  return $fragment.
+  return $fragment;
 });
 
 // Register a transformer for HtmlBody objects, this one as a function.
 function makePage(HtmlBody $p) {
   $page = new HtmlPage();
   // Do some business logic here.
-  return $page.
+  return $page;
 }
 $bus->setTransformer(HtmlBody::class, 'makePage');
 
@@ -100,7 +100,7 @@ class PageTransformer {
   }
 }
 $t = new PageTransformer();
-$bus->setTransformer(HtmlBody::class, [$p, 'transform']);
+$bus->setTransformer(HtmlBody::class, [$t, 'transform']);
 ```
 
 Now we can use that bus like so:
@@ -155,8 +155,6 @@ The preferred method of installation is via Composer with the following command:
     composer require crell/transformer
 
 See the [Composer documentation][2] for more details.
-
-Alternatively, clone the project and install into your project manually.
 
 ## See also
 
