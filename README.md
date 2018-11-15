@@ -164,5 +164,4 @@ and they won't be loaded until/unless used.  See <a href="https://github.com/Cre
 
 ## License
 
-This library is released under the MIT license.  In short, "leave the copyright
-statement intact, otherwise have fun."  See LICENSE for more information.
+The LGPL License, version 3 or, at your option, any later version. Please see [License File](LICENSE.md) for more information.

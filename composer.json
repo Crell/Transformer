@@ -5,7 +5,7 @@
         "phpunit/phpunit": "~4.4",
         "codeclimate/php-test-reporter": "dev-master"
     },
-    "license": "MIT",
+    "license": "LGPLv3+",
     "authors": [
         {
             "name": "Larry Garfield",
