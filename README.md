@@ -1,9 +1,6 @@
 # Transformer Bus
 
-
 [![Build Status](https://travis-ci.org/Crell/Transformer.svg?branch=master)](https://travis-ci.org/Crell/Transformer)
-[![Code Climate](https://codeclimate.com/repos/54b33edc69568018cd0078a3/badges/dad83f7a6a6f5bdcd2f3/gpa.svg)](https://codeclimate.com/repos/54b33edc69568018cd0078a3/feed)
-[![Test Coverage](https://codeclimate.com/repos/54b33edc69568018cd0078a3/badges/dad83f7a6a6f5bdcd2f3/coverage.svg)](https://codeclimate.com/repos/54b33edc69568018cd0078a3/feed)
 
 This is a simple library that simplifies building of transformation pipelines based on typed PHP objects.
 
