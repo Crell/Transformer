@@ -21,14 +21,14 @@ interface TransformerBusInterface
     /**
      * Continually transforms a source object until a destination type is reached.
      *
-     * @param mixed $source
+     * @param object $source
      *   An object of whatever type that we want converted.
-     * @return mixed
+     * @return object
      *   An object of the destination type.
      *
      * @throws NoTransformerFoundException
      *   Throws an exception if we ever hit a class for which no transformer
      *   has been specified.
      */
-    public function transform($source);
+    public function transform(object $source): object;
 }

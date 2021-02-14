@@ -15,8 +15,9 @@ namespace Crell\Transformer\Tests;
 
 use Crell\Transformer\TransformerBus;
 use Crell\Transformer\TransformerBusInterface;
+use PHPUnit\Framework\TestCase;
 
-class TransformerBusTest extends \PHPUnit_Framework_TestCase
+class TransformerBusTest extends TestCase
 {
     /**
      * Creates a transformer bus to be tested.
@@ -26,12 +27,11 @@ class TransformerBusTest extends \PHPUnit_Framework_TestCase
      * @return TransformerBusInterface
      *   The transformer bus implementation being tested.
      */
-    protected function createTransformerBus($target) {
-        $bus = new TransformerBus($target);
-        return $bus;
+    protected function createTransformerBus($target): TransformerBus {
+        return new TransformerBus($target);
     }
 
-    public function testSimpleMap()
+    public function testSimpleMap(): void
     {
         $transformer = function(TestA $a) {
             return new TestB();
@@ -42,10 +42,10 @@ class TransformerBusTest extends \PHPUnit_Framework_TestCase
 
         $result = $bus->transform(new TestA());
 
-        $this->assertInstanceOf(TestB::CLASSNAME, $result);
+        static::assertInstanceOf(TestB::CLASSNAME, $result);
     }
 
-    public function testMultistepMap()
+    public function testMultistepMap(): void
     {
         $ATransformer = function(TestA $a) {
             return new TestB();
@@ -60,10 +60,10 @@ class TransformerBusTest extends \PHPUnit_Framework_TestCase
 
         $result = $bus->transform(new TestA());
 
-        $this->assertInstanceOf(TestC::CLASSNAME, $result);
+        static::assertInstanceOf(TestC::CLASSNAME, $result);
     }
 
-    public function testExtendedClassMap()
+    public function testExtendedClassMap(): void
     {
         $transformer = function(TestA $a) {
             return new TestB2();
@@ -74,7 +74,7 @@ class TransformerBusTest extends \PHPUnit_Framework_TestCase
 
         $result = $bus->transform(new TestA());
 
-        $this->assertInstanceOf(TestB::CLASSNAME, $result);
+        static::assertInstanceOf(TestB::CLASSNAME, $result);
     }
 
     /**
@@ -89,23 +89,23 @@ class TransformerBusTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider transformerDefinitionProvider
      */
-    public function testCallableOptions($from, $to, $transformer, $exception = null)
+    public function testCallableOptions($from, $to, $transformer, $exception = null): void
     {
         if ($exception) {
-            $this->setExpectedException($exception);
+            $this->expectException($exception);
         }
 
         $bus = $this->createTransformerBus($to);
         $bus->setTransformer($from, $transformer);
 
         $result = $bus->transform(new $from());
-        $this->assertInstanceOf($to, $result);
+        static::assertInstanceOf($to, $result);
     }
 
     /**
      * Defines an array of transformers that convert from TestA to TestB.
      */
-    public function transformerDefinitionProvider()
+    public function transformerDefinitionProvider(): iterable
     {
         $defs = [];
 
@@ -122,7 +122,7 @@ class TransformerBusTest extends \PHPUnit_Framework_TestCase
     }
 }
 
-function function_converter_test(TestA $a)
+function function_converter_test(TestA $a): TestB
 {
     return new TestB();
 }
@@ -131,12 +131,12 @@ class MethodConverterTest
 {
     const CLASSNAME = __CLASS__;
 
-    public static function staticTransform(TestA $a)
+    public static function staticTransform(TestA $a): TestB
     {
         return new TestB();
     }
 
-    public function transform(TestA $a)
+    public function transform(TestA $a): TestB
     {
         return new TestB();
     }

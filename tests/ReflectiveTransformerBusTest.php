@@ -14,6 +14,7 @@
 namespace Crell\Transformer\Tests;
 
 use Crell\Transformer\ReflectiveTransformerBus;
+use Crell\Transformer\TransformerBus;
 
 class ReflectiveTransformerBusTest extends TransformerBusTest
 {
@@ -21,12 +22,11 @@ class ReflectiveTransformerBusTest extends TransformerBusTest
     /**
      * {@inheritdoc}
      */
-    protected function createTransformerBus($target) {
-        $bus = new ReflectiveTransformerBus($target);
-        return $bus;
+    protected function createTransformerBus($target): TransformerBus {
+        return new ReflectiveTransformerBus($target);
     }
 
-    public function testSimpleAutomaticMap()
+    public function testSimpleAutomaticMap(): void
     {
         $transformer = function(TestA $a) {
             return new TestB();
@@ -37,10 +37,10 @@ class ReflectiveTransformerBusTest extends TransformerBusTest
 
         $result = $bus->transform(new TestA());
 
-        $this->assertInstanceOf(TestB::CLASSNAME, $result);
+        static::assertInstanceOf(TestB::CLASSNAME, $result);
     }
 
-    public function testMultistepAutomaticMap()
+    public function testMultistepAutomaticMap(): void
     {
         $ATransformer = function(TestA $a) {
             return new TestB();
@@ -55,7 +55,7 @@ class ReflectiveTransformerBusTest extends TransformerBusTest
 
         $result = $bus->transform(new TestA());
 
-        $this->assertInstanceOf(TestC::CLASSNAME, $result);
+        static::assertInstanceOf(TestC::CLASSNAME, $result);
     }
 
     /**
@@ -70,23 +70,23 @@ class ReflectiveTransformerBusTest extends TransformerBusTest
      *
      * @dataProvider transformerDefinitionProvider
      */
-    public function testCallableOptions($from, $to, $transformer, $exception = null)
+    public function testCallableOptions($from, $to, $transformer, $exception = null): void
     {
         if ($exception) {
-            $this->setExpectedException($exception);
+            $this->expectException($exception);
         }
 
         $bus = $this->createTransformerBus($to);
         $bus->setAutomaticTransformer($transformer);
 
         $result = $bus->transform(new $from());
-        $this->assertInstanceOf($to, $result);
+        static::assertInstanceOf($to, $result);
     }
 
     /**
      * Defines an array of transformers that convert from TestA to TestB.
      */
-    public function transformerDefinitionProvider()
+    public function transformerDefinitionProvider(): iterable
     {
         $defs = parent::transformerDefinitionProvider();
 
