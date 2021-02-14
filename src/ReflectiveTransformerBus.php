@@ -52,6 +52,9 @@ class ReflectiveTransformerBus extends TransformerBus
             throw new InvalidTransformerException('A transformer must have one parameter and it must be typed to the input class type.');
         }
 
+        // Apparently this is deprecated in 8.0.0 but it's not clear what to replace it with.
+        // @todo replace this with something not deprecated if the docs ever get updated to
+        // say what that is.
         $class = $parameters[0]->getClass();
 
         if (!$class) {
