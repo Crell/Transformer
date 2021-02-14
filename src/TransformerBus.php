@@ -23,7 +23,7 @@ class TransformerBus implements TransformerBusInterface
      *
      * @var string
      */
-    protected $targetClass;
+    protected string $targetClass;
 
     /**
      * An associative array of callable transformers.
@@ -34,7 +34,7 @@ class TransformerBus implements TransformerBusInterface
      *
      * @var array
      */
-    protected $transformers = [];
+    protected array $transformers = [];
 
     /**
      * Constructs a new TransformerBus.
@@ -42,7 +42,7 @@ class TransformerBus implements TransformerBusInterface
      * @param string $targetClass
      *   The name of the class we are after.
      */
-    public function __construct($targetClass)
+    public function __construct(string $targetClass)
     {
         $this->targetClass = $targetClass;
     }
@@ -50,7 +50,7 @@ class TransformerBus implements TransformerBusInterface
     /**
      * {@inheritdoc}
      */
-    public function transform($source)
+    public function transform(object $source): object
     {
         $current = $source;
         $current_class = get_class($current);
@@ -72,7 +72,7 @@ class TransformerBus implements TransformerBusInterface
      * @param callable $transformer
      *   A callable that will transform an object of type $class to something else.
      */
-    public function setTransformer($class, callable $transformer)
+    public function setTransformer(string $class, callable $transformer)
     {
         $this->transformers[$class] = $transformer;
     }
@@ -89,7 +89,7 @@ class TransformerBus implements TransformerBusInterface
      *   Throws an exception if we ever hit a class for which no transformer
      *   has been specified.
      */
-    protected function getTransformer($class)
+    protected function getTransformer(string $class)
     {
         if (!isset($this->transformers[$class])) {
             throw new NoTransformerFoundException(sprintf("No transformer registered for class '%s'", $class));

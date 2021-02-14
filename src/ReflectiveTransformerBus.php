@@ -24,7 +24,7 @@ class ReflectiveTransformerBus extends TransformerBus
      * @param callable $transformer
      *   The callable to register.
      */
-    public function setAutomaticTransformer(callable $transformer)
+    public function setAutomaticTransformer(callable $transformer): void
     {
         $this->setTransformer($this->deriveReceivedClass($transformer), $transformer);
     }
@@ -43,19 +43,12 @@ class ReflectiveTransformerBus extends TransformerBus
      *   Thrown if the provided transformer has the wrong number of parameters
      *   or its parameter is not type hinted.
      */
-    protected function deriveReceivedClass(callable $transformer)
+    protected function deriveReceivedClass(callable $transformer): string
     {
-        if (is_array($transformer)) {
-            $r = new \ReflectionMethod($transformer[0], $transformer[1]);
-        } elseif (is_object($transformer) && !$transformer instanceof \Closure) {
-            $r = new \ReflectionObject($transformer);
-            $r = $r->getMethod('__invoke');
-        } else {
-            $r = new \ReflectionFunction($transformer);
-        }
+        $r = (new \ReflectionObject(\Closure::fromCallable($transformer)))->getMethod('__invoke');
 
         $parameters = $r->getParameters();
-        if (count($parameters) != 1) {
+        if (count($parameters) !== 1) {
             throw new InvalidTransformerException('A transformer must have one parameter and it must be typed to the input class type.');
         }
 
